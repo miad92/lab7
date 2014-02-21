@@ -2,7 +2,6 @@ var models = require('../models');
 
 exports.projectInfo = function(req, res) { 
   var projectID = req.params.id;
-  
   models.project
   .find({"_id": projectID})
   .sort('-date')
@@ -22,17 +21,15 @@ exports.addProject = function(req, res) {
 
   // make a new Project and save it to the DB
   // YOU MUST send an OK response w/ res.send();
-
   var newPost = new models.Project ({
    "title": form_data['project_title'],
     "date": new Date(form_data['date']),
     "summary": form_data['summary'],
     "image": form_data['image_url']
-})
+});
+  newPost.save(afterSaving);
 
-  newPost.save(addCallback);
-
-  function addCallback(err) { //this is a callback
+  function afterSaving(err) { //this is a callback
     if(err) {console.log(err); res.send(500);}
     res.send(200); 
   }
@@ -47,13 +44,10 @@ exports.deleteProject = function(req, res) {
   models.Project
   .find({"_id": projectID})
   .remove()
-  .exec(deleteCallback);
+  .exec(afterRemoving);
 
-  function deleteCallback(err, deletedBlogs) {
+  function afterRemoving(err, deletedBlogs) {
     if(err) {console.log(err); res.send(500);}
     res.send(200);
   }
-
-  // find the project and remove it
-  // YOU MUST send an OK response w/ res.send();
 }
