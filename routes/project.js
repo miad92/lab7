@@ -2,6 +2,7 @@ var models = require('../models');
 
 exports.projectInfo = function(req, res) { 
   var projectID = req.params.id;
+  
   models.project
   .find({"_id": projectID})
   .sort('-date')
@@ -24,7 +25,7 @@ exports.addProject = function(req, res) {
 
   var newPost = new models.Project ({
    "title": form_data['project_title'],
-    "date": Date.parse(form_data['date']),
+    "date": new Date(form_data['date']),
     "summary": form_data['summary'],
     "image": form_data['image_url']
 })
@@ -33,7 +34,7 @@ exports.addProject = function(req, res) {
 
   function addCallback(err) { //this is a callback
     if(err) {console.log(err); res.send(500);}
-    res.send(200);
+    res.send(200); 
   }
 }
 
